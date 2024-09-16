@@ -47,4 +47,35 @@ public class TodosTest {
         Task[] actual = todos.search("");
         Assertions.assertArrayEquals(expected, actual);
     }
+
+    @Test // находяться несколько задач
+    public void TestFindSeveralTask() {
+        Todos todos = new Todos();
+        todos.add(new SimpleTask(1, "Купить картошку"));
+        todos.add(new Epic(2, new String[]{"Приготовить разные блюда из картошки"}));
+        Task[] expected = {new SimpleTask(1, "Купить картошку"), new Epic(2, new String[]{"Приготовить разные блюда из картошки"})};
+        Task[] actual = todos.search("картошк");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test //находится ровно одна задача
+    public void TestFindOneTask() {
+        Todos todos = new Todos();
+        todos.add(new SimpleTask(1, "Купить картошку"));
+        todos.add(new Epic(2, new String[]{"Позвонить родителям"}));
+        Task[] expected = {new Epic(2, new String[]{"Позвонить родителям"})};
+        Task[] actual = todos.search("Позвонить");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test //находится 0 задач, т.е. ни одна задача не подходит
+    public void TestWhenNoResults() {
+        Todos todos = new Todos();
+        todos.add(new SimpleTask(1, "Купить картошку"));
+        todos.add(new Epic(2, new String[]{"Позвонить родителям"}));
+        String[] expected = {};
+        Task[] actual = todos.search("Забронировать отель");
+        Assertions.assertArrayEquals(expected, actual);
+    }
 }
+
